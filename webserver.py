@@ -1,4 +1,4 @@
-import cherrypy, database
+import cherrypy, database, json
 
 
 class APIServer(object):
@@ -12,7 +12,11 @@ class APIServer(object):
 
     @cherrypy.expose
     def get_stats(self, start, end):
-        return self.db.get_stats(start, end)
+        stats_out = {}
+        stats = self.db.get_stats(start, end)
+        for row in stats:
+            stats_out[row[2]] = row[1]
+        return json.dumps(stats_out)
 
     @cherrypy.expose
     def get_all(self):
@@ -20,4 +24,12 @@ class APIServer(object):
         stats = self.db.get_all()
         for row in stats:
             stats_out[row[2]] = row[1]
-        return stats_out
+        return json.dumps(stats_out)
+
+    @cherrypy.expose
+    def get_containers(self):
+        containers_out = {}
+        containers = self.db.get_containers()
+        for container in containers:
+            containers_out[container[1]] = container[0]
+        return json.dumps(containers_out)

@@ -23,6 +23,8 @@ class Monitor(threading.Thread):
         res = requests.get(self.api_path("containers", "json"))
         if res.status_code == 200:
             return json.loads(res.content)
+        else:
+            print("Web request error, check your path, yo")
 
     def run(self):
         container_list = {}
