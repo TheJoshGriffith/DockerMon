@@ -1,6 +1,4 @@
 import cherrypy, database
-from datetime import datetime
-from pprint import pprint
 
 
 class APIServer(object):
