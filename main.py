@@ -16,7 +16,7 @@ if is_file(args.config):
 	cfg = configparser.ConfigParser()
 	cfg.read(args.config)
 	dbfilename = cfg.get("General", "DatabaseFileName")
-	dhost = cfg.get("Polling", "DockerHost")
+	dhost = cfg.get("General", "DockerHost")
 else:
 	dbfilename = args.database
 	dhost = args.host
