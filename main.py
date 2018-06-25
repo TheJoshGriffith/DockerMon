@@ -22,6 +22,9 @@ else:
 	dbfilename = args.database
 	dhost = args.host
 
+print(''.join(['Database file: ', dbfilename]))
+print(''.join(['Docker host  : ', dhost]))
+
 dbw = database.Database(dbname=dbfilename)
 monitor = monitor.Monitor(dhost, dbw)
 
