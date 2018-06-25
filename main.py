@@ -4,6 +4,7 @@ import webserver
 import configparser
 import cherrypy
 import argparse
+import os
 
 
 parser = argparse.ArgumentParser(description='DockerMon performance metric tool')
@@ -12,7 +13,7 @@ parser.add_argument('--database', metavar='d', help='Specify a database file to 
 parser.add_argument('--host', metavar='h', help='Specify a host to monitor')
 args = parser.parse_args()
 
-if is_file(args.config):
+if os.path.exists(args.config) and os.path.isfile(args.config):
 	cfg = configparser.ConfigParser()
 	cfg.read(args.config)
 	dbfilename = cfg.get("General", "DatabaseFileName")
