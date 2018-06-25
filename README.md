@@ -25,4 +25,5 @@ any other reasonable time period. It's all pretty simple in that sense.
 # I'm sold, how do I use it?
 Just `pip install -r` the requirements, copy `config.ini.sample` and edit it to your own
 configuration, then run `python ./main.py` and hit the endpoint. By default it runs on
-port 8080.
+port 8080. You can use the CLI to pass in parameters for the target host and database 
+file instead of the config file.
