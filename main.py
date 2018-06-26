@@ -12,4 +12,5 @@ dbw = database.Database(dbname=cfg.get("General", "DatabaseFileName"))
 monitor = monitor.Monitor(cfg.get("Polling", "DockerHost"), dbw)
 
 monitor.start()
+cherrypy.server.socket_host = '0.0.0.0'
 cherrypy.quickstart(webserver.APIServer(cfg.get("General", "DatabaseFileName")))
