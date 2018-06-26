@@ -29,4 +29,5 @@ dbw = database.Database(dbname=dbfilename)
 monitor = monitor.Monitor(dhost, dbw)
 
 monitor.start()
+cherrypy.server.socket_host = '0.0.0.0'
 cherrypy.quickstart(webserver.APIServer(dbfilename))
