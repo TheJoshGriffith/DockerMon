@@ -60,6 +60,7 @@ class Database:
         return self.sql_get("SELECT * FROM containers;")
 
     def add_metric(self, hash, metric_string):
+        print(metric_string)
         self.sql_edit("INSERT INTO metrics(container_id, perfstring, datetime) values(\"%s\", \"%s\", \"%s\");" % (hash, metric_string, datetime.now()))
 
     def get_metrics(self, starttime, endtime, hash):

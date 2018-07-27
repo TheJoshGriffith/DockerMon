@@ -13,4 +13,9 @@ monitor = monitor.Monitor(cfg.get("Polling", "DockerHost"), dbw)
 
 monitor.start()
 cherrypy.server.socket_host = '0.0.0.0'
-cherrypy.quickstart(webserver.APIServer(cfg.get("General", "DatabaseFileName")))
+cherrypy.quickstart(webserver.WebServer(cfg.get("General", "DatabaseFileName")),config={
+    '/': {
+        'tools.staticdir.on': True,
+        'tools.staticdir.dir': 'DockerMon/static'
+    }
+})

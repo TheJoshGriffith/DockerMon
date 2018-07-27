@@ -15,6 +15,7 @@ class Monitor(threading.Thread):
         body = { "stream":False }
         res = requests.get(self.api_path("containers", hash, "stats"), params=body)
         if res.status_code == 200:
+            print(res.content)
             return json.loads(res.content)
         else:
             print("Web request error, check your path, yo")

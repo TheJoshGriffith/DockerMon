@@ -1,9 +1,9 @@
 import cherrypy, database, json
+from jinja2 import Environment, PackageLoader
 
 
-class APIServer(object):
+class APIServer:
     def __init__(self, database_name):
-        super().__init__()
         self.db = database.Database(database_name)
 
     @cherrypy.expose
@@ -33,3 +33,18 @@ class APIServer(object):
         for container in containers:
             containers_out[container[1]] = container[0]
         return json.dumps(containers_out)
+
+class WebServer(object):
+    def __init__(self, database_name):
+        super().__init__()
+        self.env = Environment(loader=PackageLoader('DockerMon', 'templates'))
+        apiserver = APIServer(database_name=database_name)
+        cherrypy.tree.mount(apiserver, '/api/',
+                            {
+                                '/api/': {'request.dispatch': cherrypy.dispatch.MethodDispatcher()}
+                            }
+                        )
+
+    @cherrypy.expose
+    def index(self):
+        return self.env.get_template('index.html').render()
