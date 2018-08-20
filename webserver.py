@@ -19,12 +19,16 @@ class APIServer:
         return json.dumps(stats_out)
 
     @cherrypy.expose
-    def get_all(self):
+    def get_all_latest(self):
         stats_out = {}
         stats = self.db.get_all()
         for row in stats:
-            stats_out[row[2]] = row[1]
+            stats_out[row[2]] = row
         return json.dumps(stats_out)
+
+    @cherrypy.expose
+    def get_all(self):
+        return str(self.db.get_all())
 
     @cherrypy.expose
     def get_containers(self):

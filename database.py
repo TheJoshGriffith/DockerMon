@@ -1,5 +1,6 @@
 import sqlite3
 from datetime import datetime
+import monitor
 
 
 class Database:
@@ -39,7 +40,7 @@ class Database:
     # Stuff for this application
     def database_setup(self):
         self.sql_edit("CREATE TABLE IF NOT EXISTS containers(id TEXT PRIMARY KEY, name TEXT);")
-        self.sql_edit("CREATE TABLE IF NOT EXISTS metrics(id INTEGER PRIMARY KEY AUTOINCREMENT, container_id TEXT, perfstring TEXT, datetime TIMESTAMP, FOREIGN KEY(container_id) REFERENCES containers(id));")
+        self.sql_edit("CREATE TABLE IF NOT EXISTS metrics(id INTEGER PRIMARY KEY AUTOINCREMENT, container_id TEXT, name TEXT, cpu INT, mem INT, nrx INT, ntx INT, datetime TIMESTAMP, FOREIGN KEY(container_id) REFERENCES containers(id));")
 
     def container_exists(self, hash):
         self.db = sqlite3.connect(self.dbname)
@@ -59,9 +60,8 @@ class Database:
     def get_containers(self):
         return self.sql_get("SELECT * FROM containers;")
 
-    def add_metric(self, hash, metric_string):
-        print(metric_string)
-        self.sql_edit("INSERT INTO metrics(container_id, perfstring, datetime) values(\"%s\", \"%s\", \"%s\");" % (hash, metric_string, datetime.now()))
+    def add_metric(self, hash, stats):
+        self.sql_edit("INSERT INTO metrics(container_id, name, cpu, mem, nrx, ntx, datetime) values(\"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\");" % (hash, stats.name, stats.cpu, stats.mem, stats.nrx, stats.ntx, datetime.now()))
 
     def get_metrics(self, starttime, endtime, hash):
         return self.sql_get("SELECT perfstring FROM metrics WHERE hash is %s AND datetime > %s AND datetime < \"%s\"", (hash, starttime, endtime,))
