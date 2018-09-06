@@ -14,13 +14,16 @@ parser.add_argument('--host', metavar='h', help='Specify a host to monitor')
 args = parser.parse_args()
 
 if os.path.exists(args.config) and os.path.isfile(args.config):
-	cfg = configparser.ConfigParser()
-	cfg.read(args.config)
-	dbfilename = cfg.get("General", "DatabaseFileName")
-	dhost = cfg.get("General", "DockerHost")
+    cfg = configparser.ConfigParser()
+    cfg.read(args.config)
+    dbfilename = cfg.get("General", "DatabaseFileName")
+    if os.environ.get('docker_host') is not None:
+        dhost = ''.join(['http://', os.environ.get('docker_host'), ':2375'])
+    else:
+        dhost = cfg.get("General", "DockerHost")
 else:
-	dbfilename = args.database
-	dhost = args.host
+    dbfilename = args.database
+    dhost = args.host
 
 print(''.join(['Database file: ', dbfilename]))
 print(''.join(['Docker host  : ', dhost]))
@@ -29,8 +32,5 @@ dbw = database.Database(dbname=dbfilename)
 monitor = monitor.Monitor(dhost, dbw)
 
 monitor.start()
-if os.environ.get('docker_host') is not None:
-    cherrypy.server.socket_host = os.environ.get('docker_host')
-else:
-    cherrypy.server.socket_host = '0.0.0.0'
+cherrypy.server.socket_host = '0.0.0.0'
 cherrypy.quickstart(webserver.APIServer(dbfilename))
