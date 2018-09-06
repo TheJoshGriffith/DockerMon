@@ -29,8 +29,8 @@ dbw = database.Database(dbname=dbfilename)
 monitor = monitor.Monitor(dhost, dbw)
 
 monitor.start()
-if os.environ('docker_host') is not None:
-    cherrypy.server.socket_host = os.environ('docker_host')
+if os.environ.get('docker_host') is not None:
+    cherrypy.server.socket_host = os.environ.get('docker_host')
 else:
     cherrypy.server.socket_host = '0.0.0.0'
 cherrypy.quickstart(webserver.APIServer(dbfilename))
