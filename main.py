@@ -18,7 +18,7 @@ if os.path.exists(args.config) and os.path.isfile(args.config):
     cfg.read(args.config)
     dbfilename = cfg.get("General", "DatabaseFileName")
     if os.environ.get('docker_host') is not None:
-        dhost = ''.join(['http://', os.environ.get('docker_host'), ':2375'])
+        dhost = ''.join(['http://', os.environ.get('DOCKER_HOST'), ':2375'])
     else:
         dhost = cfg.get("General", "DockerHost")
 else:
@@ -29,7 +29,7 @@ else:
     if args.host is not None:
         dhost = args.host
     else:
-        dhost = ''.join(['http://', os.environ.get('docker_host'), ':2375'])
+        dhost = ''.join(['http://', os.environ.get('DOCKER_HOST'), ':2375'])
 
 print(''.join(['Database file: ', dbfilename]))
 print(''.join(['Docker host  : ', dhost]))
