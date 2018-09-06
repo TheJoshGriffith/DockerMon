@@ -5,4 +5,6 @@ if [ $? -ne 0 ]; then
   echo -e "$HOST_IP\t$HOST_DOMAIN" >> /etc/hosts
 fi
 
+printenv DOCKER_HOST
+
 python3 main.py --database db.sqlite3
