@@ -6,6 +6,7 @@ import cherrypy
 import argparse
 import os
 
+os.environ
 
 parser = argparse.ArgumentParser(description='DockerMon performance metric tool')
 parser.add_argument('--config', metavar='c', help='Specify configuration file', default='config.ini')
@@ -23,7 +24,7 @@ else:
         dbfilename = args.database
     else:
         dbfilename = 'db.sqlite3'
-    if args.host is not None:
+    if args.host is not None and args.host is not "":
         dhost = args.host
     else:
         dhost = ''.join(['http://', os.environ.get('DOCKER_HOST'), ':2375'])
