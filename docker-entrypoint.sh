@@ -5,6 +5,8 @@ if [ $? -ne 0 ]; then
   echo -e "$HOST_IP\t$HOST_DOMAIN" >> /etc/hosts
 fi
 
-printenv DOCKER_HOST
+echo $DOCKER_HOST
 
-python3 main.py --database db.sqlite3
+sleep 50000000
+
+python3 main.py --database db.sqlite3 --host http://host.docker.internal:2375
