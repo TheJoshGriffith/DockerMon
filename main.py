@@ -17,12 +17,9 @@ if os.path.exists(args.config) and os.path.isfile(args.config):
     cfg = configparser.ConfigParser()
     cfg.read(args.config)
     dbfilename = cfg.get("General", "DatabaseFileName")
-    if os.environ.get('docker_host') is not None:
-        dhost = ''.join(['http://', os.environ.get('DOCKER_HOST'), ':2375'])
-    else:
-        dhost = cfg.get("General", "DockerHost")
+    dhost = cfg.get("General", "DockerHost")
 else:
-    if args.database is not None:
+    if args.database is not None and args.database is not "":
         dbfilename = args.database
     else:
         dbfilename = 'db.sqlite3'
