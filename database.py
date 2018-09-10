@@ -64,4 +64,7 @@ class Database:
         self.sql_edit("INSERT INTO metrics(container_id, name, cpu, mem, nrx, ntx, datetime) values(\"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\");" % (hash, stats.name, stats.cpu, stats.mem, stats.nrx, stats.ntx, datetime.now()))
 
     def get_metrics(self, starttime, endtime, hash):
-        return self.sql_get("SELECT perfstring FROM metrics WHERE hash is %s AND datetime > %s AND datetime < \"%s\"", (hash, starttime, endtime,))
+        return self.sql_get("SELECT * FROM metrics WHERE container_id is %s AND datetime > %s AND datetime < \"%s\"" % (hash, starttime, endtime,))
+
+    def get_container_metrics(self, hash):
+        return self.sql_get("SELECT cpu, mem, nrx, ntx, datetime FROM metrics WHERE container_id IS \"%s\" LIMIT 10" % (hash,))

@@ -11,6 +11,14 @@ class APIServer:
         return "Hello"
 
     @cherrypy.expose
+    def get_container_stats(self, hash):
+        stats = self.db.get_container_metrics(hash)
+        data = {}
+        for row in stats:
+            data[row[4]] = row[0], row[1], row[2], row[3]
+        return json.dumps(data)
+
+    @cherrypy.expose
     def get_stats(self, start, end):
         stats_out = {}
         stats = self.db.get_stats(start, end)
@@ -41,6 +49,7 @@ class APIServer:
 class WebServer(object):
     def __init__(self, database_name):
         super().__init__()
+        self.db = database.Database(database_name)
         self.env = Environment(loader=PackageLoader('DockerMon', 'templates'))
         apiserver = APIServer(database_name=database_name)
         cherrypy.tree.mount(apiserver, '/api/',
@@ -51,4 +60,11 @@ class WebServer(object):
 
     @cherrypy.expose
     def index(self):
-        return self.env.get_template('index.html').render()
+        containers = self.db.get_containers()
+        conts = []
+        for container in containers:
+            cont = {}
+            cont["name"] = container[1]
+            cont["hash"] = container[0]
+            conts.append(cont)
+        return self.env.get_template('index.html').render(containers=conts)
