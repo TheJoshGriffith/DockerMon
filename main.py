@@ -6,7 +6,7 @@ import cherrypy
 import argparse
 import os
 
-os.environ
+print(os.environ)
 
 parser = argparse.ArgumentParser(description='DockerMon performance metric tool')
 parser.add_argument('--config', metavar='c', help='Specify configuration file', default='config.ini')
