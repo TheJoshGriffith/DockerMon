@@ -24,7 +24,7 @@ class APIServer:
         stats_out = {}
         stats = self.db.get_stats(start, end)
         for row in stats:
-            stats_out[row[2]] = row[1]
+            stats_out[row[7]] = row
         return json.dumps(stats_out)
 
     @cherrypy.expose
