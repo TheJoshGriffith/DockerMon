@@ -9,6 +9,7 @@ import logging
 
 _LOG_LEVEL_STRINGS = ['CRITICAL', 'ERROR', 'WARNING', 'INFO', 'DEBUG']
 
+
 def _log_level_string_to_int(log_level_string):
     if not log_level_string in _LOG_LEVEL_STRINGS:
         message = 'invalid choice: {0} (choose from {1})'.format(log_level_string, _LOG_LEVEL_STRINGS)
@@ -19,6 +20,7 @@ def _log_level_string_to_int(log_level_string):
     assert isinstance(log_level_int, int)
 
     return log_level_int
+
 
 parser = argparse.ArgumentParser(description='DockerMon performance metric tool')
 parser.add_argument('--config', metavar='c', help='Specify configuration file', default='config.ini')
@@ -31,7 +33,9 @@ args = parser.parse_args()
 if os.path.exists(args.config) and os.path.isfile(args.config):
     cfg = configparser.ConfigParser()
     cfg.read("config.ini")
+    dbfilename = dbname=cfg.get("General", "DatabaseFileName")
     dbw = database.Database(dbname=cfg.get("General", "DatabaseFileName"))
+    dhost = cfg.get("Polling", "DockerHost")
     monitor = monitor.Monitor(cfg.get("Polling", "DockerHost"), dbw)
 else:
     if args.database is not None and args.database is not "":
@@ -53,14 +57,14 @@ staticdir = dir_path = os.path.dirname(os.path.realpath(__file__)) + '/DockerMon
 
 monitor.start()
 
-cherrypy.quickstart(webserver.WebServer(dbfilename),config={
+cherrypy.quickstart(webserver.WebServer(dbfilename), config={
     '/': {
         'tools.staticdir.on': True,
         'tools.staticdir.dir': staticdir
     }
 })
 
-cherrypy.quickstart(webserver.APIServer(dbfilename),config={
+cherrypy.quickstart(webserver.APIServer(dbfilename), config={
     '/': {
         'tools.staticdir.on': True,
         'tools.staticdir.dir': staticdir
