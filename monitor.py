@@ -24,8 +24,8 @@ class Monitor(threading.Thread):
         name = stat_string['name']
         cpu = stat_string['cpu_stats']['cpu_usage']['total_usage']
         mem = stat_string['memory_stats']['usage']
-        nrx = stat_string['networks']['eth0']['rx_bytes']
-        ntx = stat_string['networks']['eth0']['tx_bytes']
+        nrx = stat_string['networks']['eth0']['rx_bytes'] if 'networks' in stat_string and 'eth0' in stat_string['networks'] else 0
+        ntx = stat_string['networks']['eth0']['tx_bytes'] if 'networks' in stat_string and 'eth0' in stat_string['networks'] else 0
         return stats_metric(name, cpu, mem, nrx, ntx)
 
     def get_stats(self, hash):
