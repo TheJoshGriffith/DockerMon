@@ -67,4 +67,4 @@ class Database:
         return self.sql_get("SELECT * FROM metrics WHERE container_id is %s AND datetime > %s AND datetime < \"%s\"" % (hash, starttime, endtime,))
 
     def get_container_metrics(self, hash):
-        return self.sql_get("SELECT cpu, mem, nrx, ntx, datetime FROM metrics WHERE container_id IS \"%s\" LIMIT 10" % (hash,))
+        return self.sql_get("SELECT cpu, mem, nrx, ntx, datetime FROM metrics WHERE container_id IS \"%s\" ORDER BY `datetime` DESC LIMIT 10" % (hash,))

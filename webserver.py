@@ -13,6 +13,7 @@ class APIServer:
     @cherrypy.expose
     def get_container_stats(self, hash):
         stats = self.db.get_container_metrics(hash)
+        print(stats)
         data = {}
         for row in stats:
             data[row[4]] = row[0], row[1], row[2], row[3]
