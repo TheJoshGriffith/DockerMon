@@ -36,8 +36,8 @@ class Monitor(threading.Thread):
             name = jstats['name']
             cpu = jstats['cpu_stats']['cpu_usage']['total_usage']
             mem = jstats['memory_stats']['usage']
-            nrx = jstats['networks']['eth0']['rx_bytes']
-            ntx = jstats['networks']['eth0']['tx_bytes']
+            nrx = jstats['networks']['eth0']['rx_bytes'] if 'networks' in jstats and 'eth0' in jstats['networks'] else 0
+            ntx = jstats['networks']['eth0']['tx_bytes'] if 'networks' in jstats and 'eth0' in jstats['networks'] else 0
             return self.extract_stats(json.loads(res.content.decode('utf-8')))
         else:
             print("Web request error, check your path, yo")
