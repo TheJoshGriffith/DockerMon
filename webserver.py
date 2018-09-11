@@ -65,7 +65,7 @@ class WebServer(object):
         conts = []
         for container in containers:
             cont = {}
-            cont["name"] = container[1]
+            cont["name"] = (container[1][:75] + '...') if len(container[1]) > 30 else container[1]
             cont["hash"] = container[0]
             conts.append(cont)
         return self.env.get_template('index.html').render(containers=conts)
