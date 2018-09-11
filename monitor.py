@@ -1,4 +1,4 @@
-import threading, time, requests, json
+import threading, time, requests, json, logging
 
 
 class stats_metric:
@@ -56,14 +56,22 @@ class Monitor(threading.Thread):
         else:
             print("Web request error, check your path, yo")
 
-    def run(self):
+    def get_container_list(self):
         container_list = {}
         for container in self.get_containers():
             container_list[container['Id']] = container
         for k,p in container_list.items():
             if not self.db.container_exists(p['Id']):
                 self.db.add_container(container_name=p['Names'][0].lstrip('/'), hash=k)
+        return container_list
+
+    def run(self):
         while True:
+            container_list = self.get_container_list()
+            logging.debug(str(container_list))
             for k,p in container_list.items():
+                logging.debug(k)
+                logging.debug(p)
+                logging.debug(self.get_stats(k))
                 self.db.add_metric(k, self.get_stats(k))
             time.sleep(5)
