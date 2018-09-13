@@ -45,7 +45,7 @@ else:
     if args.host is not None and args.host is not "":
         dhost = args.host
     else:
-        dhost = ''.join(['http://', os.environ.get('DOCKER_HOST'), ':2375'])
+        dhost = ''.join(['http://', os.environ.get('DOCKER_HOST'), ':2376'])
 
 if args.log_level is not None and args.log_level is not "":
     logging.basicConfig(level=args.log_level)
