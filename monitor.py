@@ -1,4 +1,5 @@
 import threading, time, requests, json, logging
+from sys import platform
 
 
 class stats_metric:
@@ -23,7 +24,10 @@ class Monitor(threading.Thread):
     def extract_stats(self, stat_string):
         name = stat_string['name']
         cpu = stat_string['cpu_stats']['cpu_usage']['total_usage']
-        mem = stat_string['memory_stats']['usage']
+        if platform == 'win32':
+            mem = stat_string['memory_stats']['commitbytes']
+        else:
+            mem = stat_string['memory_stats']['usage']
         nrx = stat_string['networks']['eth0']['rx_bytes'] if 'networks' in stat_string and 'eth0' in stat_string['networks'] else 0
         ntx = stat_string['networks']['eth0']['tx_bytes'] if 'networks' in stat_string and 'eth0' in stat_string['networks'] else 0
         return stats_metric(name, cpu, mem, nrx, ntx)
